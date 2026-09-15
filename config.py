@@ -14,10 +14,15 @@ class Config:
 
     # Uses Render's managed Postgres (DATABASE_URL) when present, falls back
     # to local SQLite for development. Render/Heroku-style URLs start with
-    # 'postgres://', which SQLAlchemy 2.x rejects — normalize to 'postgresql://'.
+    # 'postgres://' or plain 'postgresql://', both of which make SQLAlchemy 2.x
+    # default to the psycopg2 driver — but requirements.txt installs psycopg3
+    # instead, so the dialect must be pinned explicitly with '+psycopg'.
     _db_url = os.environ.get("DATABASE_URL")
-    if _db_url and _db_url.startswith("postgres://"):
-        _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+    if _db_url:
+        if _db_url.startswith("postgres://"):
+            _db_url = _db_url.replace("postgres://", "postgresql+psycopg://", 1)
+        elif _db_url.startswith("postgresql://"):
+            _db_url = _db_url.replace("postgresql://", "postgresql+psycopg://", 1)
     SQLALCHEMY_DATABASE_URI = _db_url or (
         "sqlite:///" + os.path.join(BASE_DIR, "instance", "3moc.db")
     )
