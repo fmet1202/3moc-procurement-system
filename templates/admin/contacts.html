@@ -1,0 +1,66 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Partner Contacts — 3 MOC Console{% endblock %}
+{% block page_title %}Managing Partners Directory{% endblock %}
+
+{% block admin_content %}
+
+<div class="card-header">
+  <h2>The Three Abrahams — Partner Contacts</h2>
+</div>
+
+<div class="stitches-card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Order</th>
+          <th>Partner Name</th>
+          <th>Role (English)</th>
+          <th>Role (Amharic)</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in contacts %}
+        <tr>
+          <td><input type="number" value="{{ c.sort_order }}" class="input-cell" style="width: 60px;" onchange="updateContactOrder({{ c.id }}, this.value)"></td>
+          <td><strong>{{ c.name }}</strong></td>
+          <td>{{ c.role_en }}</td>
+          <td class="am">{{ c.role_am or '—' }}</td>
+          <td>{{ c.phone }}</td>
+          <td>{{ c.email or '—' }}</td>
+          <td>
+            <a href="{{ url_for('admin.contact_edit', contact_id=c.id) }}" class="btn-action">Edit Details</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function updateContactOrder(id, order) {
+  fetch('/admin/contacts/' + id + '/reorder', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sort_order: parseInt(order) })
+  }).then(r => {
+    if (!r.ok) location.reload();
+  });
+}
+</script>
+
+<style>
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.card-header h2 { font-size: 1.1rem; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th, .data-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); text-align: left; }
+.data-table th { background: #F8FAFC; color: var(--text-muted); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.data-table td input { text-align: center; }
+.btn-action { padding: 6px 12px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; color: var(--primary-accent); text-decoration: none; }
+</style>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard — 3 MOC Console{% endblock %}
+{% block page_title %}Overview{% endblock %}
+
+{% block admin_content %}
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon" style="background: var(--primary-accent);">📦</div>
+    <div class="stat-info">
+      <span class="stat-value">{{ sector_count }}</span>
+      <span class="stat-label">Active Supply Lots</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: var(--gold-accent);">📥</div>
+    <div class="stat-info">
+      <span class="stat-value">{{ new_submissions }}</span>
+      <span class="stat-label">Pending RFQs</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #3B82F6;">📋</div>
+    <div class="stat-info">
+      <span class="stat-value">{{ submission_count }}</span>
+      <span class="stat-label">Total Inbound Requests</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon" style="background: #8B5CF6;">👥</div>
+    <div class="stat-info">
+      <span class="stat-value">3</span>
+      <span class="stat-label">Managing Partners</span>
+    </div>
+  </div>
+</div>
+
+<div class="stitches-card" style="margin-top: 24px;">
+  <div class="card-header">
+    <h2>Recent Inbound Tender RFQs</h2>
+    <a href="{{ url_for('admin.submissions_list') }}" class="view-all">View All →</a>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Organization</th>
+          <th>Contact</th>
+          <th>Selected Lots</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in recent_submissions %}
+        <tr>
+          <td>{{ s.created_at.strftime('%b %d, %Y') }}</td>
+          <td><strong>{{ s.organization }}</strong></td>
+          <td>{{ s.contact_name }}<br><small>{{ s.phone }}</small></td>
+          <td><span class="lots-badge">{{ s.selected_lots }}</span></td>
+          <td><span class="status-badge status-{{ s.status|lower }}">{{ s.status }}</span></td>
+          <td><a href="{{ url_for('admin.submissions_list') }}#sub-{{ s.id }}" class="btn-action">Open</a></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6" class="empty-state">No inbound RFQs yet. Share the public quotation form with prospective clients.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="quick-actions" style="margin-top: 24px;">
+  <h3>Quick Actions</h3>
+  <div class="action-buttons">
+    <a href="{{ url_for('admin.calculator') }}" class="action-btn primary">
+      <span class="action-icon">🧮</span>
+      <div>
+        <strong>Prepare Tender Bid</strong>
+        <span>Open the Supplier Comparison Matrix</span>
+      </div>
+    </a>
+    <a href="{{ url_for('admin.sectors_list') }}" class="action-btn">
+      <span class="action-icon">📦</span>
+      <div>
+        <strong>Manage 7 Lots</strong>
+        <span>Add, edit, or reorder supply sectors</span>
+      </div>
+    </a>
+    <a href="{{ url_for('admin.contacts_list') }}" class="action-btn">
+      <span class="action-icon">👥</span>
+      <div>
+        <strong>Update Partner Info</strong>
+        <span>Keep contact details current</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+<style>
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.stat-card { background: var(--card-bg); padding: 20px; border-radius: 8px; border: 1px solid var(--border-subtle); display: flex; gap: 16px; align-items: center; }
+.stat-icon { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+.stat-value { font-size: 2rem; font-weight: 800; color: var(--text-main); display: block; }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.card-header h2 { font-size: 1.1rem; }
+.view-all { color: var(--primary-accent); font-weight: 600; font-size: 0.85rem; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th, .data-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-subtle); text-align: left; }
+.data-table th { background: #F8FAFC; color: var(--text-muted); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
+.lots-badge { font-size: 0.75rem; background: var(--gold-light); color: #854D0E; padding: 2px 8px; border-radius: 999px; display: inline-block; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status-badge { padding: 4px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+.status-new { background: #FEF3C7; color: #92400E; }
+.status-reviewing { background: #DBEAFE; color: #1E40AF; }
+.status-quoted { background: #D1FAE5; color: #065F46; }
+.status-closed { background: #F1F5F9; color: #475569; }
+.btn-action { color: var(--primary-accent); font-weight: 600; font-size: 0.8rem; }
+.empty-state { text-align: center; color: var(--text-muted); padding: 40px; }
+.quick-actions h3 { font-size: 1rem; margin-bottom: 16px; }
+.action-buttons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.action-btn { background: var(--card-bg); border: 1px solid var(--border-subtle); padding: 20px; border-radius: 8px; display: flex; gap: 12px; align-items: flex-start; text-decoration: none; color: var(--text-main); transition: all 0.15s; }
+.action-btn:hover { border-color: var(--primary-accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.action-btn.primary { border-color: var(--primary-accent); }
+.action-icon { font-size: 1.4rem; }
+.action-btn strong { display: block; font-size: 0.9rem; margin-bottom: 2px; }
+.action-btn span { font-size: 0.78rem; color: var(--text-muted); }
+@media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } .action-buttons { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr; } .stat-card { flex-direction: column; text-align: center; } }
+</style>
+{% endblock %}

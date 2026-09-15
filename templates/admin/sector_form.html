@@ -1,0 +1,47 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_content %}
+
+<div class="dashboard-header" style="margin-bottom: 24px;">
+  <h1>{{ "Edit Procurement Sector" if sector else "Create New Procurement Sector" }}</h1>
+  <a href="{{ url_for('admin.sectors_list') }}" class="btn-sm" style="color: #135334; font-weight:700; text-decoration:none;">← Back to Lots</a>
+</div>
+
+<div class="card-box" style="max-width: 680px;">
+  <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:flex; gap:16px; margin-bottom:16px;">
+      <div style="flex:1;">
+        <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Lot Identifier (e.g. LOT 08)</label>
+        <input type="text" name="lot_number" class="cell-input" value="{{ sector.lot_number if sector else 'LOT 0' }}" required>
+      </div>
+      <div style="flex:1;">
+        <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Sort Order</label>
+        <input type="number" name="sort_order" class="cell-input" value="{{ sector.sort_order if sector else 0 }}" required>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Sector Title (English)</label>
+      <input type="text" name="title_en" class="cell-input" value="{{ sector.title_en if sector else '' }}" required style="width:100%;">
+    </div>
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Sector Title (Amharic)</label>
+      <input type="text" name="title_am" class="cell-input" value="{{ sector.title_am if sector else '' }}" style="width:100%;">
+    </div>
+
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Key Sample Items (Comma separated summary)</label>
+      <input type="text" name="items_summary" class="cell-input" value="{{ sector.items_summary if sector else '' }}" placeholder="Paper, Pens, Markers, Envelopes..." style="width:100%;">
+    </div>
+
+    <div class="form-group" style="margin-bottom: 20px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Detailed Description</label>
+      <textarea name="description" class="cell-input" rows="4" required style="width:100%;">{{ sector.description if sector else '' }}</textarea>
+    </div>
+
+    <button type="submit" class="btn-primary-add">{{ "Save Sector" if sector else "Create Sector" }}</button>
+  </form>
+</div>
+
+{% endblock %}

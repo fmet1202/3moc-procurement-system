@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}3 MOC Partner Workspace{% endblock %}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+  <!-- Android App PWA Meta Tags -->
+  <meta name="theme-color" content="#135334">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/static/images/app-icon-192.png">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-emblem">3A</div>
+      <div class="sidebar-brand">
+        <h3>3 MOC</h3>
+        <span>Partner Portal</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+        <span>📊</span> Dashboard
+      </a>
+
+      <a href="{{ url_for('admin.calculator') }}" class="highlight-nav {% if request.endpoint == 'admin.calculator' %}active{% endif %}">
+        <span>🧮</span> Bid & Profit Matrix
+      </a>
+
+      <a href="{{ url_for('admin.submissions_list') }}" class="{% if request.endpoint in ['admin.submissions_list', 'admin.submission_detail'] %}active{% endif %}">
+        <span>📥</span> Tender RFQs
+      </a>
+
+      <a href="{{ url_for('admin.sectors_list') }}" class="{% if request.endpoint in ['admin.sectors_list', 'admin.sector_new', 'admin.sector_edit'] %}active{% endif %}">
+        <span>📦</span> Supply Sectors
+      </a>
+
+      <a href="{{ url_for('admin.contacts_list') }}" class="{% if request.endpoint in ['admin.contacts_list', 'admin.contact_edit'] %}active{% endif %}">
+        <span>👥</span> Partner Contacts
+      </a>
+
+      <div class="nav-sep"></div>
+
+      <a href="{{ url_for('public.profile') }}" target="_blank">
+        <span>📄</span> Official Dossier
+      </a>
+      <a href="{{ url_for('public.index') }}" target="_blank">
+        <span>🌐</span> Live Site
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="{{ url_for('admin.change_password') }}" class="btn-sm" style="display:block; text-align:center; margin-bottom:8px; color:#C29849; text-decoration:none; font-weight:700;">🔑 Change Password</a>
+      <a href="{{ url_for('admin.logout') }}" class="btn-signout">Sign Out</a>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="topbar-title">{% block page_title %}Partner Workspace{% endblock %}</div>
+      <div class="admin-user-pill">
+        <span class="status-online"></span>
+        <span>Abraham (Partner)</span>
+      </div>
+    </header>
+
+    <main class="admin-canvas">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="admin-flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block admin_content %}{% endblock %}
+    </main>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .then(reg => console.log('3 MOC ServiceWorker registered.'))
+          .catch(err => console.log('ServiceWorker error:', err));
+      });
+    }
+  </script>
+</body>
+</html>

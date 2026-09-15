@@ -1,0 +1,40 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_content %}
+
+<div class="matrix-toolbar">
+  <div>
+    <h1>Quotation Spec Review: {{ sub.organization }}</h1>
+    <p>Submitted on {{ sub.created_at.strftime('%B %d, %Y at %H:%M UTC') }}</p>
+  </div>
+  <a href="{{ url_for('admin.submissions_list') }}" class="btn-secondary-print" style="text-decoration:none;">← Back to RFQs</a>
+</div>
+
+<div class="card-box" style="max-width: 780px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; background:#FAF8F5; padding:12px 18px; border-radius:6px; border:1px solid var(--admin-border); margin-bottom:20px;">
+    <span>Current Status: <strong>{{ sub.status }}</strong></span>
+    <form method="POST" action="{{ url_for('admin.submission_update_status', sub_id=sub.id) }}" style="display:flex; gap:8px;">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <select name="status" class="cell-input" style="width:auto; padding:6px 12px;">
+        <option value="New" {% if sub.status == 'New' %}selected{% endif %}>New</option>
+        <option value="Reviewing" {% if sub.status == 'Reviewing' %}selected{% endif %}>Reviewing</option>
+        <option value="Quoted" {% if sub.status == 'Quoted' %}selected{% endif %}>Quoted</option>
+        <option value="Closed" {% if sub.status == 'Closed' %}selected{% endif %}>Closed</option>
+      </select>
+      <button type="submit" class="btn-primary-add" style="padding:6px 14px;">Update</button>
+    </form>
+  </div>
+
+  <table class="admin-table" style="margin-bottom:24px;">
+    <tr><th style="width:28%;">Organization</th><td><strong>{{ sub.organization }}</strong></td></tr>
+    <tr><th>Contact Person</th><td>{{ sub.contact_name }}</td></tr>
+    <tr><th>Phone Number</th><td><a href="tel:{{ sub.phone }}" style="color:var(--admin-green); font-weight:700;">{{ sub.phone }}</a></td></tr>
+    <tr><th>Email</th><td>{% if sub.email %}<a href="mailto:{{ sub.email }}">{{ sub.email }}</a>{% else %}—{% endif %}</td></tr>
+    <tr><th>Tender / Bid Ref</th><td>{{ sub.tender_ref or 'Direct Request' }}</td></tr>
+    <tr><th>Target Lots</th><td><strong>{{ sub.selected_lots }}</strong></td></tr>
+  </table>
+
+  <h3 style="font-size:1.1rem; margin-bottom:10px;">Detailed Client Requisition / Items</h3>
+  <div style="background:#F8FAFC; padding:18px; border-radius:6px; border:1px solid var(--admin-border); white-space:pre-wrap; font-size:0.9rem; line-height:1.6;">{{ sub.message }}</div>
+</div>
+
+{% endblock %}

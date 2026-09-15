@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Procurement Sectors & Lots — 3 MOC{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <div class="wrap">
+    <span class="section-label">LOT DIRECTORY</span>
+    <h1>7 Core Government Procurement Sectors</h1>
+    <p>Every lot is quoted with itemized transparent pricing, verifiable samples, and rapid delivery.</p>
+  </div>
+</section>
+
+<section class="sectors-page-wrap wrap">
+  <div class="sectors-detailed-grid">
+    {% for s in sectors %}
+    <div class="lot-detailed-card" id="lot-{{ s.id }}">
+      <div class="lot-card-top">
+        <span class="lot-number-tag">{{ s.lot_number }}</span>
+        <a href="{{ url_for('public.rfq') }}" class="lot-rfq-btn">Request Lot Quote →</a>
+      </div>
+      <h2>{{ s.title_en }}</h2>
+      {% if s.title_am %}<p class="am lot-detail-am">{{ s.title_am }}</p>{% endif %}
+      <p class="lot-detail-desc">{{ s.description }}</p>
+      
+      {% if s.items_summary %}
+      <div class="lot-sample-items">
+        <strong>Typical Tender Items:</strong>
+        <p>{{ s.items_summary }}</p>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="custom-lot-banner">
+    <div class="custom-lot-content">
+      <h3>Have an Unlisted Custom Lot or Specific BOQ?</h3>
+      <p>If your agency or institution has issued a specialized tender with mixed supplies, paste or attach your specifications in our quotation tool.</p>
+      <a href="{{ url_for('public.rfq') }}" class="btn-primary">Submit Custom Tender Requisition</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

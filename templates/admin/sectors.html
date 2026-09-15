@@ -1,0 +1,52 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Manage Sectors — 3 MOC Console{% endblock %}
+{% block page_title %}7 Supply Lots Management{% endblock %}
+
+{% block admin_content %}
+
+<div class="matrix-toolbar">
+  <div>
+    <h2>Procurement Lots Registry</h2>
+    <p>Active institutional supply sectors available for government bids and quotations.</p>
+  </div>
+  <a href="{{ url_for('admin.sector_new') }}" class="btn-primary-add">+ Add New Lot</a>
+</div>
+
+<div class="card-box">
+  <div style="overflow-x: auto;">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">Order</th>
+          <th style="width:90px;">Lot #</th>
+          <th>Title (English)</th>
+          <th>Title (Amharic)</th>
+          <th>Key Items</th>
+          <th style="width:120px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in sectors %}
+        <tr>
+          <td><strong>{{ s.sort_order }}</strong></td>
+          <td><span style="background:var(--admin-green-light); color:var(--admin-green); padding:2px 8px; border-radius:3px; font-weight:700; font-size:0.75rem;">{{ s.lot_number }}</span></td>
+          <td><strong>{{ s.title_en }}</strong></td>
+          <td class="am">{{ s.title_am or '—' }}</td>
+          <td><small style="color:var(--admin-muted);">{{ s.items_summary or '—' }}</small></td>
+          <td>
+            <div class="action-links">
+              <a href="{{ url_for('admin.sector_edit', sector_id=s.id) }}" class="link-btn">Edit</a>
+              <form method="POST" action="{{ url_for('admin.sector_delete', sector_id=s.id) }}" onsubmit="return confirm('Delete this lot? This action cannot be undone.');" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="link-del-btn">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

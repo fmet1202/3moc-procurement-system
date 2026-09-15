@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="100%" height="100%">
+  <defs>
+    <path id="stampOuterPath" d="M 160,160 m -125,0 a 125,125 0 1,1 250,0 a 125,125 0 1,1 -250,0" fill="none"/>
+    <path id="stampInnerPath" d="M 160,160 m -95,0 a 95,95 0 1,1 190,0 a 95,95 0 1,1 -190,0" fill="none"/>
+  </defs>
+
+  <!-- Outer Traditional Concentric Border -->
+  <circle cx="160" cy="160" r="154" fill="none" stroke="#101C26" stroke-width="3"/>
+  <circle cx="160" cy="160" r="144" fill="none" stroke="#101C26" stroke-width="1" stroke-dasharray="3 3"/>
+  <circle cx="160" cy="160" r="108" fill="none" stroke="#B88728" stroke-width="1.5"/>
+
+  <!-- Curved Texts -->
+  <text font-family="'Plus Jakarta Sans', sans-serif" font-size="10.5" font-weight="700" letter-spacing="3.2" fill="#101C26">
+    <textPath href="#stampOuterPath" startOffset="3%">
+      3 MOC GENERAL SUPPLY · THREE ABRAHAMS PARTNERSHIP ·
+    </textPath>
+  </text>
+
+  <text font-family="'Noto Sans Ethiopic', sans-serif" font-size="10.5" font-weight="600" letter-spacing="2.5" fill="#1B4D2E">
+    <textPath href="#stampInnerPath" startOffset="14%">
+      ★ የሦስቱ አብርሃሞች የጨረታና አቅርቦት አገልግሎት ★
+    </textPath>
+  </text>
+
+  <!-- Center Three "A" Crest -->
+  <g transform="translate(160, 160)">
+    <!-- 3 Triangular Points (Delta / AAA) -->
+    <polygon points="0,-48 36,24 -36,24" fill="none" stroke="#B88728" stroke-width="2.5"/>
+    <text x="0" y="-12" text-anchor="middle" font-family="'Cinzel', serif" font-weight="700" font-size="28" fill="#101C26">3A</text>
+    <text x="0" y="8" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="9" letter-spacing="3" fill="#1B4D2E">3 MOC</text>
+    <text x="0" y="20" text-anchor="middle" font-family="'Noto Sans Ethiopic', sans-serif" font-size="7.5" fill="#5F7081">አዲስ አበባ</text>
+  </g>
+</svg>

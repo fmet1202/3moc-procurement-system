@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}3 MOC — Triple-A Institutional Procurement | Addis Ababa{% endblock %}</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+Ethiopic:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- PWA Manifest & Meta Tags -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#135334">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" sizes="192x192" href="/static/images/app-icon-192.png">
+</head>
+<body>
+
+  <!-- Top Strip -->
+  <div class="topbar">
+    <div class="wrap topbar-flex">
+      <div class="topbar-info">
+        <span>📍 Addis Ababa, Ethiopia</span>
+        <span class="dot">•</span>
+        <span>e-GP Registered General Supplier</span>
+        <span class="dot">•</span>
+        <span class="am-tag">ሦስቱ አብርሃሞች</span>
+      </div>
+      <div class="topbar-actions">
+        <a href="{{ url_for('public.profile') }}" target="_blank" class="topbar-dossier">📄 Official Dossier (Print/PDF)</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sleek Single-Line Navbar -->
+  <header class="navbar">
+    <div class="wrap nav-flex">
+      <a href="{{ url_for('public.index') }}" class="logo-link">
+        <!-- Logo #2: SVG Emblem -->
+        <svg viewBox="0 0 340 80" width="180" height="42" class="brand-svg">
+          <g transform="translate(5, 5)">
+            <path d="M 35,10 L 12,28 L 20,52 L 35,42 Z" fill="#135334"/>
+            <path d="M 35,10 L 58,28 L 50,52 L 35,42 Z" fill="#C29849"/>
+            <path d="M 20,55 L 50,55 L 35,74 Z" fill="#182730"/>
+            <polygon points="35,26 46,32 35,38 24,32" fill="#E8CF8C"/>
+            <polygon points="24,33 35,39 35,50 24,44" fill="#C29849"/>
+            <polygon points="35,39 46,33 46,44 35,50" fill="#9E7528"/>
+          </g>
+          <text x="76" y="48" font-family="'Playfair Display', serif" font-weight="800" font-size="34" fill="#182730">3 MOC</text>
+          <text x="78" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="7.5" letter-spacing="1.8" fill="#182730">TRIPLE-A PROCUREMENT</text>
+        </svg>
+      </a>
+
+      <!-- Clean Horizontal Navigation Tabs -->
+      <nav class="nav-links" id="navLinks">
+        <a href="{{ url_for('public.index') }}" class="{% if request.endpoint == 'public.index' %}active{% endif %}">Home</a>
+        <a href="{{ url_for('public.about') }}" class="{% if request.endpoint == 'public.about' %}active{% endif %}">About</a>
+        <a href="{{ url_for('public.sectors') }}" class="{% if request.endpoint == 'public.sectors' %}active{% endif %}">Sectors & Lots</a>
+        <a href="{{ url_for('public.rfq') }}" class="{% if request.endpoint == 'public.rfq' %}active{% endif %}">Request Quote</a>
+        <a href="{{ url_for('public.contact') }}" class="{% if request.endpoint == 'public.contact' %}active{% endif %}">Contact</a>
+      </nav>
+
+      <div class="nav-cta">
+        <a href="{{ url_for('public.rfq') }}" class="btn-nav">Get Proforma</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Notifications -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="wrap flash-holder">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div class="footer-brand-col">
+        <span class="footer-logo">3 MOC</span>
+        <p class="footer-tagline">TRIPLE-A PROCUREMENT · 3 ABRAHAMS</p>
+        <p class="footer-summary">A consolidated general supply contractor formed in Addis Ababa by three partners to execute complete institutional tenders across 7 public sectors with guaranteed sample adherence.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation Tabs</h4>
+        <ul>
+          <li><a href="{{ url_for('public.index') }}">Home</a></li>
+          <li><a href="{{ url_for('public.about') }}">About the 3 Abrahams</a></li>
+          <li><a href="{{ url_for('public.sectors') }}">7 Procurement Lots</a></li>
+          <li><a href="{{ url_for('public.rfq') }}">Request Proforma Quotation</a></li>
+          <li><a href="{{ url_for('public.profile') }}" target="_blank">Print Company Dossier</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Regulatory Compliance</h4>
+        <ul>
+          <li>✓ TIN Registration Active</li>
+          <li>✓ VAT Certificate Verified</li>
+          <li>✓ Addis Ababa Trade Bureau License</li>
+          <li>✓ e-GP (Federal Procurement) Registered</li>
+          <li><a href="{{ url_for('admin.login') }}" style="color:var(--gold); margin-top:8px; display:inline-block;">Partner Console Login →</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom wrap">
+      <p>&copy; 2026 3 MOC General Supply & Procurement. Addis Ababa, Ethiopia.</p>
+      <p>Official Public Tender & Institutional Supply Contractor.</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' });
+      });
+    }
+  </script>
+</body>
+</html>

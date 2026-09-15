@@ -1,0 +1,248 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Tender Bid & Supplier Matrix — 3 MOC{% endblock %}
+{% block page_title %}Tender Bid Preparation & Supplier Comparison Engine{% endblock %}
+
+{% block admin_content %}
+
+<!-- TOP LIVE KPI STATISTICS BANNER -->
+<div class="calc-kpi-grid">
+  <div class="kpi-tile">
+    <span class="kpi-title">Total Cost of Goods (ETB)</span>
+    <span class="kpi-num" id="kpiTotalCost">0.00</span>
+    <span class="kpi-note">Best wholesale purchase costs</span>
+  </div>
+  <div class="kpi-tile">
+    <span class="kpi-title">Consolidated Bid (Pre-VAT)</span>
+    <span class="kpi-num" id="kpiSubtotal">0.00</span>
+    <span class="kpi-note">Total tender offer without tax</span>
+  </div>
+  <div class="kpi-tile">
+    <span class="kpi-title">Ethiopian 15% VAT (ETB)</span>
+    <span class="kpi-num" id="kpiVat">0.00</span>
+    <span class="kpi-note">Official government tax</span>
+  </div>
+  <div class="kpi-tile kpi-bid">
+    <span class="kpi-title">Gross Bid Offer (Inc. VAT)</span>
+    <span class="kpi-num" id="kpiGrossTotal">0.00</span>
+    <span class="kpi-note">Final Submission Offer</span>
+  </div>
+  <div class="kpi-tile kpi-profit">
+    <span class="kpi-title">Projected Net Profit</span>
+    <span class="kpi-num" id="kpiProfit">0.00</span>
+    <span class="kpi-note" id="kpiMargin">Net Margin: 0%</span>
+  </div>
+</div>
+
+<!-- THE MATRIX TABLE -->
+<div class="card-box">
+  
+  <!-- Tender Info Bar -->
+  <div class="tender-meta-bar">
+    <div class="tender-meta-item">
+      <span>Tender Title:</span>
+      <input type="text" placeholder="e.g. Ministry of Health Lot 1 Stationery" style="width: 280px;">
+    </div>
+    <div class="tender-meta-item">
+      <span>Bid Ref:</span>
+      <input type="text" placeholder="e.g. NCB/MOH/004/2026" style="width: 180px;">
+    </div>
+  </div>
+
+  <div class="matrix-toolbar">
+    <div>
+      <h2>Lot Item Matrix & Supplier Quote Comparison</h2>
+      <p>Scroll horizontally if needed. Best prices are highlighted green. Change quantities or markups to see real-time updates.</p>
+    </div>
+    
+    <div class="matrix-actions">
+      <!-- Quick Global Markup Presets -->
+      <div class="markup-presets">
+        <span>Set All Markups:</span>
+        <button type="button" class="btn-preset" onclick="setAllMarkups(15)">15%</button>
+        <button type="button" class="btn-preset" onclick="setAllMarkups(20)">20%</button>
+        <button type="button" class="btn-preset" onclick="setAllMarkups(25)">25%</button>
+      </div>
+
+      <button type="button" class="btn-primary-add" id="btnAddRowBtn" onclick="addRow()">+ Add Tender Item</button>
+      <button type="button" class="btn-secondary-print" onclick="window.print()">🖨️ Print Bid Sheet</button>
+    </div>
+  </div>
+
+  <div class="matrix-container">
+    <table class="matrix-table" id="tenderTable">
+      <thead>
+        <tr>
+          <th style="width: 40px; text-align: center;">#</th>
+          <th style="width: 250px;">Item Description</th>
+          <th style="width: 95px; text-align: center;">Qty</th>
+          <th style="width: 85px; text-align: center;">Unit</th>
+          <th class="col-supplier-header" style="width: 110px;">Supplier A</th>
+          <th class="col-supplier-header" style="width: 110px;">Supplier B</th>
+          <th class="col-supplier-header" style="width: 110px;">Supplier C</th>
+          <th class="col-best-header" style="width: 105px; text-align: right;">Best Cost</th>
+          <th style="width: 85px; text-align: center;">Markup %</th>
+          <th style="width: 110px; text-align: right;">Bid Pre-VAT</th>
+          <th style="width: 95px; text-align: right;">15% VAT</th>
+          <th style="width: 110px; text-align: right;">Gross Unit</th>
+          <th style="width: 130px; text-align: right;">Line Total</th>
+          <th style="width: 120px; text-align: right;">Net Profit</th>
+          <th style="width: 40px; text-align: center;"></th>
+        </tr>
+      </thead>
+      <tbody id="matrixBody">
+        <!-- Injected via JS -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let itemIndex = 0;
+
+const sampleItems = [
+  { name: "A4 Duplicating Paper (80gsm, 500 sheets)", qty: 500, unit: "Ream", sA: 412, sB: 410, sC: 435, markup: 18 },
+  { name: "Heavy-Duty Box Files (Metal Edge)", qty: 200, unit: "Pcs", sA: 180, sB: 195, sC: 175, markup: 20 },
+  { name: "Floor Disinfectant Chemical (5 Litres)", qty: 60, unit: "Jugs", sA: 650, sB: 620, sC: 640, markup: 22 },
+  { name: "Stainless Steel Vacuum Thermos (2.5L)", qty: 40, unit: "Pcs", sA: 1850, sB: 1900, sC: 1820, markup: 25 }
+];
+
+document.addEventListener("DOMContentLoaded", function () {
+  const tbody = document.getElementById("matrixBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+  sampleItems.forEach(item => {
+    addRow(item.name, item.qty, item.unit, item.sA, item.sB, item.sC, item.markup);
+  });
+
+  recalculateAll();
+});
+
+function addRow(name = "", qty = 100, unit = "Pcs", sA = "", sB = "", sC = "", markup = 20) {
+  itemIndex++;
+  const tbody = document.getElementById("matrixBody");
+  const tr = document.createElement("tr");
+  tr.id = `row-${itemIndex}`;
+
+  tr.innerHTML = `
+    <td style="text-align: center;"><strong>${itemIndex}</strong></td>
+    <td><input type="text" class="cell-input item-desc" value="${name}" placeholder="Item description" oninput="recalculateAll()"></td>
+    <td><input type="number" class="cell-input num-qty" value="${qty}" min="1" step="any" oninput="recalculateAll()"></td>
+    <td><input type="text" class="cell-input item-unit" value="${unit}" placeholder="Pcs" oninput="recalculateAll()"></td>
+    <td><input type="number" class="cell-input sup-price sup-a" value="${sA}" placeholder="0.00" step="any" oninput="recalculateAll()"></td>
+    <td><input type="number" class="cell-input sup-price sup-b" value="${sB}" placeholder="0.00" step="any" oninput="recalculateAll()"></td>
+    <td><input type="number" class="cell-input sup-price sup-c" value="${sC}" placeholder="0.00" step="any" oninput="recalculateAll()"></td>
+    <td class="cell-best-cost">0.00</td>
+    <td><input type="number" class="cell-input num-markup" value="${markup}" min="0" step="any" oninput="recalculateAll()"></td>
+    <td class="cell-bid-unit bold-num">0.00</td>
+    <td class="cell-vat bold-num">0.00</td>
+    <td class="cell-gross-unit bold-num">0.00</td>
+    <td class="cell-line-total gross-line-total">0.00</td>
+    <td class="cell-profit profit-text">0.00</td>
+    <td style="text-align: center;"><button type="button" class="btn-row-del" onclick="removeRow(${itemIndex})" title="Remove item">×</button></td>
+  `;
+
+  tbody.appendChild(tr);
+  recalculateAll();
+}
+
+function removeRow(id) {
+  const row = document.getElementById(`row-${id}`);
+  if (row) {
+    row.remove();
+    recalculateAll();
+  }
+}
+
+function setAllMarkups(percent) {
+  document.querySelectorAll(".num-markup").forEach(input => {
+    input.value = percent;
+  });
+  recalculateAll();
+}
+
+function recalculateAll() {
+  const rows = document.querySelectorAll("#matrixBody tr");
+  let grandCost = 0;
+  let grandSubtotal = 0;
+  let grandVat = 0;
+  let grandGross = 0;
+  let grandProfit = 0;
+
+  rows.forEach(row => {
+    const qtyInput = row.querySelector(".num-qty");
+    const markupInput = row.querySelector(".num-markup");
+    const inputA = row.querySelector(".sup-a");
+    const inputB = row.querySelector(".sup-b");
+    const inputC = row.querySelector(".sup-c");
+
+    const qty = parseFloat(qtyInput ? qtyInput.value : 0) || 0;
+    const markup = parseFloat(markupInput ? markupInput.value : 0) || 0;
+    const sA = parseFloat(inputA ? inputA.value : 0) || 0;
+    const sB = parseFloat(inputB ? inputB.value : 0) || 0;
+    const sC = parseFloat(inputC ? inputC.value : 0) || 0;
+
+    const validPrices = [sA, sB, sC].filter(p => p > 0);
+    const bestCost = validPrices.length > 0 ? Math.min(...validPrices) : 0;
+
+    // Highlight the lowest supplier price in green
+    [inputA, inputB, inputC].forEach(el => {
+      if (el) el.classList.remove("best-price-highlight");
+    });
+
+    if (bestCost > 0) {
+      if (sA === bestCost && inputA) inputA.classList.add("best-price-highlight");
+      else if (sB === bestCost && inputB) inputB.classList.add("best-price-highlight");
+      else if (sC === bestCost && inputC) inputC.classList.add("best-price-highlight");
+    }
+
+    const bidUnitPreVat = bestCost * (1 + (markup / 100));
+    const vatUnit = bidUnitPreVat * 0.15; // Ethiopian 15% VAT
+    const grossUnit = bidUnitPreVat + vatUnit;
+
+    const lineTotalGross = grossUnit * qty;
+    const lineProfit = (bidUnitPreVat - bestCost) * qty;
+    const lineTotalCost = bestCost * qty;
+    const lineTotalPreVat = bidUnitPreVat * qty;
+    const lineTotalVat = vatUnit * qty;
+
+    const cellBestCost = row.querySelector(".cell-best-cost");
+    const cellBidUnit = row.querySelector(".cell-bid-unit");
+    const cellVat = row.querySelector(".cell-vat");
+    const cellGrossUnit = row.querySelector(".cell-gross-unit");
+    const cellLineTotal = row.querySelector(".cell-line-total");
+    const cellProfit = row.querySelector(".cell-profit");
+
+    if (cellBestCost) cellBestCost.textContent = bestCost.toFixed(2);
+    if (cellBidUnit) cellBidUnit.textContent = bidUnitPreVat.toFixed(2);
+    if (cellVat) cellVat.textContent = vatUnit.toFixed(2);
+    if (cellGrossUnit) cellGrossUnit.textContent = grossUnit.toFixed(2);
+    if (cellLineTotal) cellLineTotal.textContent = lineTotalGross.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (cellProfit) cellProfit.textContent = lineProfit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    grandCost += lineTotalCost;
+    grandSubtotal += lineTotalPreVat;
+    grandVat += lineTotalVat;
+    grandGross += lineTotalGross;
+    grandProfit += lineProfit;
+  });
+
+  const kpiCostEl = document.getElementById("kpiTotalCost");
+  const kpiSubtotalEl = document.getElementById("kpiSubtotal");
+  const kpiVatEl = document.getElementById("kpiVat");
+  const kpiGrossEl = document.getElementById("kpiGrossTotal");
+  const kpiProfitEl = document.getElementById("kpiProfit");
+  const kpiMarginEl = document.getElementById("kpiMargin");
+
+  if (kpiCostEl) kpiCostEl.textContent = grandCost.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ETB";
+  if (kpiSubtotalEl) kpiSubtotalEl.textContent = grandSubtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ETB";
+  if (kpiVatEl) kpiVatEl.textContent = grandVat.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ETB";
+  if (kpiGrossEl) kpiGrossEl.textContent = grandGross.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ETB";
+  if (kpiProfitEl) kpiProfitEl.textContent = grandProfit.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " ETB";
+
+  const marginPct = grandSubtotal > 0 ? ((grandProfit / grandSubtotal) * 100).toFixed(1) : "0.0";
+  if (kpiMarginEl) kpiMarginEl.textContent = `Net Margin: ${marginPct}%`;
+}
+</script>
+
+{% endblock %}

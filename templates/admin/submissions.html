@@ -1,0 +1,71 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Inbound RFQs — 3 MOC Console{% endblock %}
+{% block page_title %}Inbound Tender Requests{% endblock %}
+
+{% block admin_content %}
+
+<div class="matrix-toolbar">
+  <div>
+    <h2>Inbound Proforma Requests</h2>
+    <p>Incoming quotation requests submitted by public institutions and buyers.</p>
+  </div>
+</div>
+
+<div class="card-box">
+  <div style="overflow-x: auto;">
+    <table class="admin-table" id="submissionsTable">
+      <thead>
+        <tr>
+          <th>Date / Time</th>
+          <th>Organization</th>
+          <th>Contact Person</th>
+          <th>Phone</th>
+          <th>Selected Lots</th>
+          <th>Tender Ref</th>
+          <th>Status</th>
+          <th style="width:120px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in submissions %}
+        <tr id="sub-{{ s.id }}">
+          <td>{{ s.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td><strong>{{ s.organization }}</strong></td>
+          <td>{{ s.contact_name }}</td>
+          <td><a href="tel:{{ s.phone }}" style="color:var(--admin-dark); font-weight:600;">{{ s.phone }}</a></td>
+          <td><span style="font-size:0.75rem; background:var(--admin-gold-light); color:#854D0E; padding:2px 8px; border-radius:999px; display:inline-block; max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ s.selected_lots }}</span></td>
+          <td>{{ s.tender_ref or '—' }}</td>
+          <td>
+            <span style="padding:4px 10px; border-radius:999px; font-size:0.72rem; font-weight:700;
+              {% if s.status == 'New' %}background:#FEF3C7; color:#92400E;
+              {% elif s.status == 'Reviewing' %}background:#DBEAFE; color:#1E40AF;
+              {% elif s.status == 'Quoted' %}background:#D1FAE5; color:#065F46;
+              {% else %}background:#F1F5F9; color:#475569;{% endif %}">
+              {{ s.status }}
+            </span>
+          </td>
+          <td>
+            <div class="action-links">
+              <a href="{{ url_for('admin.submission_detail', sub_id=s.id) }}" class="link-btn">Review</a>
+              <form method="POST" action="{{ url_for('admin.submission_delete', sub_id=s.id) }}" onsubmit="return confirm('Delete this submission record?');" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="link-del-btn">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="8" style="text-align:center; padding:50px 20px; color:var(--admin-muted);">
+            <div style="font-size:2.5rem; margin-bottom:12px; opacity:0.5;">📥</div>
+            <p>No inbound RFQs recorded yet.</p>
+            <p style="font-size:0.85rem; margin-top:4px;">Share <code>{{ url_for('public.rfq', _external=true) }}</code> with prospective clients.</p>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

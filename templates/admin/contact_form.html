@@ -1,0 +1,36 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_content %}
+
+<div class="dashboard-header" style="margin-bottom: 24px;">
+  <h1>Edit Partner: {{ contact.name }}</h1>
+  <a href="{{ url_for('admin.contacts_list') }}" class="btn-sm" style="color: #135334; font-weight:700; text-decoration:none;">← Back</a>
+</div>
+
+<div class="card-box" style="max-width: 580px;">
+  <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Partner Full Name</label>
+      <input type="text" name="name" class="cell-input" value="{{ contact.name }}" required style="width:100%;">
+    </div>
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Role / Function (English)</label>
+      <input type="text" name="role_en" class="cell-input" value="{{ contact.role_en }}" required style="width:100%;">
+    </div>
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Role / Function (Amharic)</label>
+      <input type="text" name="role_am" class="cell-input" value="{{ contact.role_am or '' }}" style="width:100%;">
+    </div>
+    <div class="form-group" style="margin-bottom: 16px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Direct Mobile Phone</label>
+      <input type="tel" name="phone" class="cell-input" value="{{ contact.phone }}" required style="width:100%;">
+    </div>
+    <div class="form-group" style="margin-bottom: 20px;">
+      <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom:6px;">Email Address</label>
+      <input type="email" name="email" class="cell-input" value="{{ contact.email or '' }}" style="width:100%;">
+    </div>
+    <button type="submit" class="btn-primary-add">Save Partner Contact</button>
+  </form>
+</div>
+
+{% endblock %}

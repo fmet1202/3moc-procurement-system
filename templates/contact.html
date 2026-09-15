@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Contact Us — 3 MOC{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <div class="wrap">
+    <span class="section-label">GET IN TOUCH</span>
+    <h1>Partner Contacts & Inquiries</h1>
+    <p>Direct communication with the three founding principals of 3 MOC.</p>
+  </div>
+</section>
+
+<section class="contact-page-wrap wrap">
+  <div class="contact-cards-grid">
+    {% for c in contacts %}
+    <div class="contact-person-card">
+      <div class="person-icon">3A</div>
+      <h3>{{ c.name }}</h3>
+      <span class="person-role">{{ c.role_en }}</span>
+      {% if c.role_am %}<span class="person-role-am">{{ c.role_am }}</span>{% endif %}
+      <div class="person-links">
+        <p>📞 Phone: <a href="tel:{{ c.phone }}">{{ c.phone }}</a></p>
+        <p>✉️ Email: <a href="mailto:{{ c.email }}">{{ c.email }}</a></p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="office-location-card">
+    <div class="office-text">
+      <h3>Principal Office</h3>
+      <p><strong>3 MOC General Supply & Procurement</strong></p>
+      <p>Addis Ababa, Ethiopia</p>
+      <p>Operating Hours: Monday – Saturday (8:30 AM – 5:30 PM)</p>
+      <p>Dedicated to public sector bids, NGO requisitions, and commercial supply lots.</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

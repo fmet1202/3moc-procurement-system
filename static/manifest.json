@@ -1,0 +1,24 @@
+{
+  "name": "3 MOC Institutional Procurement",
+  "short_name": "3 MOC",
+  "description": "Government tender lot supplier and quotation calculator in Addis Ababa",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#111C24",
+  "theme_color": "#135334",
+  "icons": [
+    {
+      "src": "/static/images/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/images/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

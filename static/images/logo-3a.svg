@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" width="100%" height="100%">
+  <defs>
+    <!-- Rich Ethiopian Heritage Gradients -->
+    <linearGradient id="goldA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2B755"/>
+      <stop offset="50%" stop-color="#B88728"/>
+      <stop offset="100%" stop-color="#8F6415"/>
+    </linearGradient>
+
+    <linearGradient id="greenA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B4D2E"/>
+      <stop offset="100%" stop-color="#0D2616"/>
+    </linearGradient>
+
+    <linearGradient id="slateA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24384A"/>
+      <stop offset="100%" stop-color="#101C26"/>
+    </linearGradient>
+
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- ================= ICON: TRIPLE-A INTERLOCKING CRATE ================= -->
+  <g transform="translate(30, 10)" filter="url(#subtleShadow)">
+    
+    <!-- Outer Circular Guideline Accent -->
+    <circle cx="80" cy="80" r="74" fill="none" stroke="#E2B755" stroke-width="1.5" stroke-dasharray="3 3" opacity="0.6"/>
+    <circle cx="80" cy="80" r="64" fill="#FDFBF7" stroke="#101C26" stroke-width="1"/>
+
+    <!-- Central Hexagonal Core (The Procurement Lot Box) -->
+    <polygon points="80,62 95,71 95,89 80,98 65,89 65,71" fill="#E2B755" opacity="0.25"/>
+
+    <!-- FIRST "A" (Top Abraham: Heading / Sourcing) -->
+    <g id="abrahamTop">
+      <!-- Left Leg -->
+      <path d="M 80,24 L 62,78 L 73,78 L 80,54 Z" fill="url(#greenA)"/>
+      <!-- Right Leg -->
+      <path d="M 80,24 L 98,78 L 87,78 L 80,54 Z" fill="url(#greenA)"/>
+      <!-- Crossbar linking to center -->
+      <path d="M 68,64 L 92,64 L 92,71 L 68,71 Z" fill="url(#goldA)"/>
+    </g>
+
+    <!-- SECOND "A" (Bottom Right Abraham: Compliance & Law) rotated 120 deg -->
+    <use href="#abrahamTop" transform="rotate(120, 80, 80)" fill="url(#slateA)"/>
+
+    <!-- THIRD "A" (Bottom Left Abraham: Logistics & Delivery) rotated 240 deg -->
+    <use href="#abrahamTop" transform="rotate(240, 80, 80)" fill="url(#goldA)"/>
+
+    <!-- Center Point Monogram Seal -->
+    <circle cx="80" cy="80" r="10" fill="#101C26"/>
+    <text x="80" y="84" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="9.5" fill="#E2B755">3A</text>
+  </g>
+
+  <!-- ================= TYPOGRAPHY LOCKUP ================= -->
+  <g transform="translate(200, 38)">
+    
+    <!-- Brand Wordmark -->
+    <text x="0" y="44" font-family="'Cinzel', 'Spectral', serif" font-weight="700" font-size="46" letter-spacing="2" fill="#101C26">
+      3 MOC
+    </text>
+
+    <!-- Vertical Brass Divider -->
+    <rect x="180" y="10" width="2.5" height="48" fill="url(#goldA)"/>
+
+    <!-- Story Caption: Triple Abraham & Supply Specialty -->
+    <g transform="translate(195, 0)">
+      <text x="0" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="12.5" letter-spacing="3" fill="#1B4D2E">
+        TRIPLE-A PROCUREMENT
+      </text>
+      <text x="0" y="38" font-family="'Noto Sans Ethiopic', sans-serif" font-weight="600" font-size="12" fill="#8F6415">
+        የሦስቱ አብርሃሞች አጠቃላይ አቅራቢ
+      </text>
+      <text x="0" y="54" font-family="'Plus Jakarta Sans', sans-serif" font-weight="500" font-size="10.5" letter-spacing="1.5" fill="#5F7081">
+        GOVERNMENT TENDER & LOT CONTRACTOR · ADDIS ABABA
+      </text>
+    </g>
+
+    <!-- Sub-tagline bar below -->
+    <line x1="0" y1="74" x2="450" y2="74" stroke="#E2B755" stroke-width="1" opacity="0.4"/>
+    <text x="0" y="90" font-family="'Plus Jakarta Sans', sans-serif" font-weight="600" font-size="10" letter-spacing="2.5" fill="#5F7081">
+      STATIONERY · SANITARY · UTENSILS · FURNITURE · IT · UNIFORMS · PRINTING
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}About Us — 3 MOC & The Three Abrahams{% endblock %}
+{% block content %}
+
+<section class="page-header">
+  <div class="wrap">
+    <span class="section-label">OUR IDENTITY & FOUNDATION</span>
+    <h1>The Story of the Three Abrahams</h1>
+    <p class="am page-header-am">የሦስቱ አብርሃሞች አጠቃላይ የዕቃና አገልግሎት አቅራቢ ድርጅት</p>
+  </div>
+</section>
+
+<section class="about-content wrap">
+  <div class="about-grid">
+    <div class="about-text-col">
+      <h2>One Name, One Vision, Complete Procurement Reliability</h2>
+      <p class="lead">
+        When three founding partners who all bear the name <strong>Abraham</strong> joined forces in Addis Ababa, they didn't just form a partnership—they established a standard.
+      </p>
+      <p>
+        In finance and international commerce, <strong>"Triple-A"</strong> signifies the highest grade of creditworthiness, dependability, and performance. 3 MOC brings that exact standard to Ethiopian public procurement.
+      </p>
+      <p>
+        Government ministries and public agencies often struggle with fragmented procurement: stationery purchased from one broker, sanitation chemicals from another, and cafeteria kitchenware from a third. Deliveries are frequently late, samples don't match delivered goods, and multiple invoices complicate accounting.
+      </p>
+      <p>
+        <strong>3 MOC solves this completely.</strong> We bid on consolidated lots, provide a single accountable proforma, enforce strict physical quality control, and deliver everything directly to your stores.
+      </p>
+    </div>
+
+    <div class="pillars-col">
+      <div class="pillar-box">
+        <h3>🏛️ Legal & Institutional Standing</h3>
+        <ul class="pillar-list">
+          <li><strong>Entity Type:</strong> General Supply Partnership</li>
+          <li><strong>Operational Center:</strong> Addis Ababa, Ethiopia</li>
+          <li><strong>Public Platform:</strong> e-GP Compliant Supplier</li>
+          <li><strong>Invoicing:</strong> Registered for TIN and 15% Standard VAT</li>
+        </ul>
+      </div>
+
+      <div class="pillar-box" style="border-top-color: var(--gold);">
+        <h3>🤝 The 3 Operational Pillars</h3>
+        <ul class="pillar-list">
+          <li><strong>Abraham 1 (Sourcing):</strong> Quality control and wholesale pricing.</li>
+          <li><strong>Abraham 2 (Tender Compliance):</strong> Specification alignment and e-GP documentation.</li>
+          <li><strong>Abraham 3 (Logistics):</strong> Packaging, offloading, and compound delivery.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="leadership-section">
+    <h2>Managing Partners</h2>
+    <div class="partners-row">
+      {% for c in contacts %}
+      <div class="partner-box">
+        <div class="partner-badge">3A</div>
+        <h3>{{ c.name }}</h3>
+        <span class="partner-func">{{ c.role_en }}</span>
+        {% if c.role_am %}<span class="partner-func-am">{{ c.role_am }}</span>{% endif %}
+        <p class="partner-contact-info">
+          <span>📞 {{ c.phone }}</span><br>
+          <span>✉️ {{ c.email }}</span>
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}
