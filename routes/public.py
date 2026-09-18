@@ -1,9 +1,10 @@
+import os
 import threading
+from types import SimpleNamespace
 from flask import Blueprint, render_template, request, redirect, url_for, flash, send_from_directory
 from extensions import db
 from models import Sector, ContactPerson, Submission
 from telegram_alert import send_telegram_rfq_alert
-import os
 
 public_bp = Blueprint("public", __name__)
 
@@ -50,9 +51,25 @@ def rfq():
         db.session.add(sub)
         db.session.commit()
 
+        # Snapshot the fields into a plain object BEFORE starting the thread.
+        # After db.session.commit(), SQLAlchemy expires `sub`'s attributes so
+        # the next read re-fetches from the DB — but that refetch needs an
+        # active Flask app context, which the background thread doesn't have.
+        # Reading the values here (still inside the request context) avoids
+        # any DB/app-context access from inside the thread.
+        alert_data = SimpleNamespace(
+            organization=sub.organization,
+            contact_name=sub.contact_name,
+            phone=sub.phone,
+            email=sub.email,
+            tender_ref=sub.tender_ref,
+            selected_lots=sub.selected_lots,
+            message=sub.message,
+        )
+
         # Send Telegram notification without blocking the response — a slow
         # or unreachable Telegram API should never delay the RFQ confirmation.
-        threading.Thread(target=send_telegram_rfq_alert, args=(sub,), daemon=True).start()
+        threading.Thread(target=send_telegram_rfq_alert, args=(alert_data,), daemon=True).start()
 
         flash("Your proforma request has been recorded. Our team will review your specifications.", "success")
         return redirect(url_for("public.rfq"))
