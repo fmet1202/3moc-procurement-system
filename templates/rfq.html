@@ -1,43 +1,37 @@
 {% extends "base.html" %}
-{% block title %}Request Proforma Quotation — 3 MOC{% endblock %}
+{% block title %}Request a quote — 3 MOC{% endblock %}
 {% block content %}
 
 <section class="page-header">
   <div class="wrap">
-    <span class="section-label">INSTITUTIONAL TENDER INQUIRY</span>
-    <h1>Request a Tender Lot Proforma</h1>
-    <p>Select your desired procurement lots below and list your quantities or specifications.</p>
+    <h1>Request a tender lot proforma</h1>
+    <p>Select the lots you need and describe your quantities below.</p>
   </div>
 </section>
 
 <section class="rfq-page-wrap wrap">
   <div class="rfq-layout">
-    
-    <div class="rfq-info-col">
-      <div class="rfq-info-card">
-        <h3>How It Works</h3>
-        <ol class="rfq-steps">
-          <li><strong>Select Lots:</strong> Pick the sectors your institution needs.</li>
-          <li><strong>Provide Specifications:</strong> Paste item quantities (e.g. 1000 reams A4, 200 boxes pens, 50 mop sets).</li>
-          <li><strong>Receive Official Proforma:</strong> The 3 Abrahams calculate market-best pricing and return a formal quotation with VAT.</li>
-        </ol>
-      </div>
 
-      <div class="rfq-direct-card">
-        <h4>Need Immediate Tender Assistance?</h4>
-        <p>📞 Sourcing Desk: +251 97 373 7398</p>
-        <p>✉️ Inquiries: abrhamsiyoum01@gmail.com</p>
-        <p>📍 Location: Addis Ababa, Ethiopia</p>
+    <div>
+      <ol class="rfq-steps">
+        <li><strong>Select lots</strong> — pick the sectors your institution needs.</li>
+        <li><strong>Describe quantities</strong> — e.g. 1000 reams A4, 200 boxes pens.</li>
+        <li><strong>Receive a proforma</strong> — priced with VAT, ready to attach to your bid.</li>
+      </ol>
+      <div class="rfq-direct">
+        <p>Prefer to talk it through first?</p>
+        <p><a href="tel:+251973737398">+251 97 373 7398</a></p>
+        <p><a href="mailto:abrhamsiyoum01@gmail.com">abrhamsiyoum01@gmail.com</a></p>
       </div>
     </div>
 
-    <div class="rfq-form-col">
-      <form method="POST" class="proforma-form">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <h3>Tender Requisition Form</h3>
+    <div class="proforma-form">
+      <h2>Tender requisition</h2>
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <div class="form-group">
-          <label>Select Target Procurement Lots:</label>
+          <label>Procurement lots</label>
           <div class="lots-check-list">
             {% for s in sectors %}
             <label class="lot-check-item">
@@ -50,37 +44,37 @@
 
         <div class="form-row-2">
           <div class="form-group">
-            <label>Organization / Ministry / Entity *</label>
-            <input type="text" name="organization" placeholder="e.g. Ministry of Agriculture" required>
+            <label>Organization *</label>
+            <input type="text" name="organization" placeholder="Ministry of Agriculture" required>
           </div>
           <div class="form-group">
-            <label>Officer Name / In Charge *</label>
-            <input type="text" name="contact_name" placeholder="Ato / W/ro ......" required>
+            <label>Officer name *</label>
+            <input type="text" name="contact_name" placeholder="Ato / W/ro ..." required>
           </div>
         </div>
 
         <div class="form-row-2">
           <div class="form-group">
-            <label>Phone Number *</label>
-            <input type="tel" name="phone" placeholder="0911 ......" required>
+            <label>Phone *</label>
+            <input type="tel" name="phone" placeholder="0911 ..." required>
           </div>
           <div class="form-group">
-            <label>Email Address</label>
+            <label>Email</label>
             <input type="email" name="email" placeholder="officer@domain.gov.et">
           </div>
         </div>
 
         <div class="form-group">
-          <label>Tender Code / Bid Reference (Optional)</label>
-          <input type="text" name="tender_ref" placeholder="e.g. NCB/MOH/015/2026 Lot 1">
+          <label>Tender / bid reference</label>
+          <input type="text" name="tender_ref" placeholder="NCB/MOH/015/2026 Lot 1">
         </div>
 
         <div class="form-group">
-          <label>Item Quantities & Technical Specifications *</label>
-          <textarea name="message" rows="6" placeholder="List your exact item requirements, quantities, delivery timeline, and sample requirements..." required></textarea>
+          <label>Quantities & specifications *</label>
+          <textarea name="message" rows="5" placeholder="List items, quantities, delivery timeline..." required></textarea>
         </div>
 
-        <button type="submit" class="btn-primary" style="width:100%; padding:15px; font-size:1rem;">Submit Official Quote Request</button>
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;">Submit request</button>
       </form>
     </div>
 

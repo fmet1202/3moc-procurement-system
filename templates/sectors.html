@@ -1,43 +1,36 @@
 {% extends "base.html" %}
-{% block title %}Procurement Sectors & Lots — 3 MOC{% endblock %}
+{% block title %}Sectors & lots — 3 MOC{% endblock %}
 {% block content %}
 
 <section class="page-header">
   <div class="wrap">
-    <span class="section-label">LOT DIRECTORY</span>
-    <h1>7 Core Government Procurement Sectors</h1>
-    <p>Every lot is quoted with itemized transparent pricing, verifiable samples, and rapid delivery.</p>
+    <h1>Seven procurement sectors</h1>
+    <p>Itemized pricing, verifiable samples, and delivery direct to your store.</p>
   </div>
 </section>
 
 <section class="sectors-page-wrap wrap">
-  <div class="sectors-detailed-grid">
+  <div class="ledger">
     {% for s in sectors %}
-    <div class="lot-detailed-card" id="lot-{{ s.id }}">
-      <div class="lot-card-top">
-        <span class="lot-number-tag">{{ s.lot_number }}</span>
-        <a href="{{ url_for('public.rfq') }}" class="lot-rfq-btn">Request Lot Quote →</a>
+    <div class="ledger-row" id="lot-{{ s.id }}">
+      <span class="ledger-lot">{{ s.lot_number }}</span>
+      <div class="ledger-body">
+        <h3>{{ s.title_en }}</h3>
+        {% if s.title_am %}<p class="am ledger-am">{{ s.title_am }}</p>{% endif %}
+        <p class="ledger-desc">{{ s.description }}</p>
+        {% if s.items_summary %}<p class="ledger-items"><strong>Typical items:</strong> {{ s.items_summary }}</p>{% endif %}
       </div>
-      <h2>{{ s.title_en }}</h2>
-      {% if s.title_am %}<p class="am lot-detail-am">{{ s.title_am }}</p>{% endif %}
-      <p class="lot-detail-desc">{{ s.description }}</p>
-      
-      {% if s.items_summary %}
-      <div class="lot-sample-items">
-        <strong>Typical Tender Items:</strong>
-        <p>{{ s.items_summary }}</p>
-      </div>
-      {% endif %}
+      <a href="{{ url_for('public.rfq') }}" class="ledger-action">Quote this lot</a>
     </div>
     {% endfor %}
   </div>
 
-  <div class="custom-lot-banner">
-    <div class="custom-lot-content">
-      <h3>Have an Unlisted Custom Lot or Specific BOQ?</h3>
-      <p>If your agency or institution has issued a specialized tender with mixed supplies, paste or attach your specifications in our quotation tool.</p>
-      <a href="{{ url_for('public.rfq') }}" class="btn-primary">Submit Custom Tender Requisition</a>
+  <div class="custom-lot-callout">
+    <div>
+      <h3>Need a mixed or custom lot?</h3>
+      <p>Paste your BOQ into the quotation form — we'll price it the same way.</p>
     </div>
+    <a href="{{ url_for('public.rfq') }}" class="btn-primary">Submit specifications</a>
   </div>
 </section>
 

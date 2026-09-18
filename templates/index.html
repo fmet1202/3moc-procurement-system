@@ -1,115 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- HERO -->
 <section class="hero-section">
-  <div class="wrap hero-layout">
+  <div class="wrap">
     <div class="hero-text">
-      <div class="hero-badge">
-        <span class="badge-dot"></span> Triple-A Rated Government Supplier
-      </div>
-      <h1>One Contract.<br>One Consolidated Price.<br><span class="highlight-gold">Zero Procurement Friction.</span></h1>
-      <p class="hero-am">አንድ አቅራቢ፣ አንድ የጠቅላላ ዋጋ፣ ለቢሮዎ የሚያስፈልገው ቁሳቁስ በሙሉ በታማኝነት።</p>
+      <p class="hero-kicker">The 3 Abrahams</p>
+      <h1>One contractor for every institutional order.</h1>
+      <p class="am hero-am">አንድ አቅራቢ፣ አንድ ዋጋ፣ ለቢሮዎ የሚያስፈልገው ቁሳቁስ በሙሉ።</p>
       <p class="hero-para">
-        Formed by three managing partners who all bear the name <strong>Abraham</strong>, <strong>3 MOC</strong> specializes in turnkey public tender lot fulfillment across Addis Ababa. We bid, source, quality-verify, and deliver complete packages of stationery, hygiene materials, utensils, furniture, and IT equipment.
+        Three partners, all named Abraham, run a consolidated supply operation across Addis Ababa. We bid on full tender lots, verify samples against delivered stock, and invoice as one line — instead of chasing five separate vendors for one office order.
       </p>
       <div class="hero-btns">
-        <a href="{{ url_for('public.rfq') }}" class="btn-primary">Request a Lot Proforma</a>
-        <a href="{{ url_for('public.sectors') }}" class="btn-secondary">View 7 Supply Sectors</a>
-      </div>
-    </div>
-
-    <div class="hero-card-side">
-      <div class="trust-box">
-        <div class="trust-box-header">
-          <span class="trust-emblem">3A</span>
-          <div>
-            <h3>The 3 Abrahams Standard</h3>
-            <p>Unified Accountability & Fast Delivery</p>
-          </div>
-        </div>
-        <ul class="trust-points">
-          <li>
-            <strong>1. Complete Lot Quoting</strong>
-            <span>One single proforma for complex multi-item tenders.</span>
-          </li>
-          <li>
-            <strong>2. Sample Verification Guaranteed</strong>
-            <span>Zero discrepancies between bid specifications and physical stock.</span>
-          </li>
-          <li>
-            <strong>3. Addis Ababa Compound Delivery</strong>
-            <span>Direct offloading to ministry and regional agency central stores.</span>
-          </li>
-        </ul>
-        <div class="trust-footer">
-          <span>e-GP Registered Contractor</span>
-          <a href="{{ url_for('public.about') }}" class="learn-link">About Firm →</a>
-        </div>
+        <a href="{{ url_for('public.rfq') }}" class="btn-primary">Request a proforma</a>
+        <a href="{{ url_for('public.sectors') }}" class="btn-secondary">See the 7 sectors</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CREDENTIALS BAR -->
-<section class="cred-strip">
-  <div class="wrap cred-grid">
-    <div class="cred-item">
-      <span class="cred-icon">📜</span>
-      <div>
-        <h4>TIN & VAT Compliant</h4>
-        <p>Official tax invoices provided</p>
-      </div>
-    </div>
-    <div class="cred-item">
-      <span class="cred-icon">🏛️</span>
-      <div>
-        <h4>e-GP Ready</h4>
-        <p>Electronic Government Procurement</p>
-      </div>
-    </div>
-    <div class="cred-item">
-      <span class="cred-icon">📦</span>
-      <div>
-        <h4>Multi-Item Bundling</h4>
-        <p>Save time with single-lot billing</p>
-      </div>
-    </div>
-    <div class="cred-item">
-      <span class="cred-icon">⚡</span>
-      <div>
-        <h4>Direct Partner Sourcing</h4>
-        <p>No middlemen, lower bid prices</p>
-      </div>
-    </div>
+<section class="fact-strip">
+  <div class="wrap fact-row">
+    <div class="fact-item"><p><strong>TIN & VAT</strong> registered, invoices issued on request</p></div>
+    <div class="fact-item"><p><strong>e-GP</strong> compliant for federal and regional tenders</p></div>
+    <div class="fact-item"><p><strong>One proforma</strong> covers every item across a lot</p></div>
+    <div class="fact-item"><p><strong>Direct delivery</strong> to ministry and agency stores</p></div>
   </div>
 </section>
 
-<!-- SECTORS PREVIEW -->
 <section class="home-sectors">
   <div class="wrap">
-    <div class="section-title-wrap">
-      <span class="section-label">CORE COMPETENCIES</span>
-      <h2>Seven Strategic Procurement Lots</h2>
-      <p>3 MOC supplies multi-item institutional orders across these government tender categories:</p>
+    <div class="section-head">
+      <h2>Seven procurement sectors</h2>
+      <p>Every lot below can be quoted as its own proforma.</p>
     </div>
 
-    <div class="sector-cards-grid">
+    <div class="ledger">
       {% for s in sectors %}
-      <div class="sector-tile">
-        <span class="sector-lot-tag">{{ s.lot_number }}</span>
-        <h3>{{ s.title_en }}</h3>
-        {% if s.title_am %}<p class="sector-am">{{ s.title_am }}</p>{% endif %}
-        <p class="sector-desc">{{ s.description }}</p>
-        <div class="sector-bottom">
-          <a href="{{ url_for('public.rfq') }}" class="tile-link">Quote this Lot →</a>
+      <div class="ledger-row">
+        <span class="ledger-lot">{{ s.lot_number }}</span>
+        <div class="ledger-body">
+          <h3>{{ s.title_en }}</h3>
+          {% if s.title_am %}<p class="am ledger-am">{{ s.title_am }}</p>{% endif %}
+          <p class="ledger-desc">{{ s.description }}</p>
         </div>
+        <a href="{{ url_for('public.rfq') }}" class="ledger-action">Quote this lot</a>
       </div>
       {% endfor %}
     </div>
 
-    <div class="all-sectors-cta">
-      <a href="{{ url_for('public.sectors') }}" class="btn-outline">Explore All Lots & Specifications →</a>
+    <div class="section-more">
+      <a href="{{ url_for('public.sectors') }}" class="btn-outline">View full lot directory</a>
     </div>
   </div>
 </section>
